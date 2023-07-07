@@ -4,66 +4,23 @@
 
 This extension allows you to use an HX711 module with the micro:bit as a weighing machine.
 
+Original HX711 extension by daferdur:  https://github.com/daferdur/pxt-myHX711
+
 ## Synopsis
 
 The library myHX711 provides a set of functions to allow you to measure weight.
 
- ![](HX711_functions.jpeg)
-
-
-## HX711 set DataPin
-
-||HX711 set DataPin||
-
-This block function sets the pin where data comes in, i.e. Data Pin.
-
-## HX711 set ClockPin
-
-||HX711 set ClockPin||
-
-This block function sets the clock pin for getting data from HX711 module, i.e. Clock Pin.
-
 ## begin
 
-||begin||
+||begin with ClockPin __ and DataPin __||
 
 This block function sets the module to begin readings. Required in the "on start" block.
 
-## Power Up
+## Tare
 
-||Power Up||
+||tare||
 
-This block function awakens the HX711 module to be prepared for readings.
-
-## Power Down
-
-||Power Down||
-
-This block function puts the HX711 module to sleep for lower power consumption.
-
-## Read
-
-||Read||
-
-This block function reads an integer out without any taring or offset in the reading.
-
-## read N averaged raw data
-
-||read N averaged raw data||
-
-This block function makes "N" number of integer readings without any taring or offset neither scaling in the readings and calculates an average.
-
-## Get Offset
-
-||Get Offset||
-
-This block function gets the configured offset.
-
-## Get Scale
-
-||Get Scale||
-
-This block function gets the configured scale. Scale is the maximum weight that can be measured, and depends on the cell used.
+This block function tares to zero with 10 readings, applying an offset to set the zero.
 
 ## Set Offset
 
@@ -73,25 +30,25 @@ This block function sets the configured offset to apply to the readings.
 
 ## Set Scale
 
-||Set Scale||
+||Set Scale with known weight||
 
-This block function sets the configured scale. Scale is the maximum weight that can be measured, and depends on the cell used.
+This block function sets the configured scale. It depends on the cell used.
 
-## Tare
+## Read
 
-||tare||
+||Read raw data||
 
-This block function tares to zero with "N" readings, applying an offset to set the zero. "tare(N)" has an input parameter that cannot be zero. It should at least should be 1 for one reading. We recomend a value of 10.
+This block function reads an integer out without any taring or offset in the reading.
 
-## get N averaged offsetted data
+## read raw average
 
-||get N averaged offsetted data||
+||read raw average N times||
 
-This block function gets the final value of the weight applying the configured offset only but without scale. The N parameter must be higher than 1. The returned result will be N averaged.
+This block function makes "N" number of integer readings without any taring or offset neither scaling in the readings and calculates an average.
 
-## get N averaged final scaled value
+## get scaled average
 
-||get N averaged final scaled value||
+||get scaled average N times||
 
 This block function gets the final value of the weight applying the configured scale and offset. N parameter must be higher than 1. The returned result will be N averaged.
 
@@ -115,6 +72,8 @@ Serial print("Weight: ");
 Serial print line(get N averaged final scaled value(10));
 
 ```
+
+# For original version
 
 ## Features
 1. It provides a `tare(N)` function, which "resets" the scale to 0. Many other
