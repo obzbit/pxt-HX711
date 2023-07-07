@@ -28,6 +28,7 @@ namespace HX711 {
         PD_SCK = pinPD_SCK;
         DOUT = pinDOUT;
         set_gain(128) //default gain 128
+        tare()
     }
 
     export function is_ready(): boolean {
@@ -169,7 +170,7 @@ namespace HX711 {
         return false
     }
 
-    //% blockId="HX711_READ_AVERAGE" block="read raw average %times" times
+    //% blockId="HX711_READ_AVERAGE" block="read raw average %times times"
     //% weight=80 blockGap=8
     export function read_average(times: number = 10): number {
         let sum: number = 0
@@ -200,7 +201,7 @@ namespace HX711 {
     }
 
     //% blockId="HX711_TARE" block="tare"
-    //% weight=90 blockGap=8
+    //% weight=95 blockGap=8
     export function tare() {
         let avg: number = 0
         avg = read_average(10)
@@ -210,7 +211,9 @@ namespace HX711 {
     //% blockId="HX711_SET_SCALE" block="set scale with known weight %weight"
     //% weight=90 blockGap=8
     export function set_scale(weight: number) {
-        SCALE = read_average(10) / weight
+        let avg: number = 0
+        avg = read_average(10)     
+        SCALE = avg / weight
     }
 
     //% blockId="HX711_SET_OFFSET" block="set offset %offset"
