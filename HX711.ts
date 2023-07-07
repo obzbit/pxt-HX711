@@ -23,8 +23,8 @@ namespace HX711 {
      * @param pinDOUT pin at which the DOUT line is connected
      */
     //% blockId="HX711_BEGIN" block="begin with ClockPin %pinPD_SCK and DataPin %pinDOUT"
-    //% weight=100 blockGap=8
-    export function begin(pinPD_SCK: DigitalPin = DigitalPin.P0, pinDOUT: DigitalPin = DigitalPin.P1) {
+    //% weight=100 blockGap=8 pinPD_SCK.defl=DigitalPin.P0 pinDOUT.defl=DigitalPin.P1
+    export function begin(pinPD_SCK: DigitalPin, pinDOUT: DigitalPin) {
         PD_SCK = pinPD_SCK;
         DOUT = pinDOUT;
         set_gain(128) //default gain 128
@@ -171,7 +171,7 @@ namespace HX711 {
     }
 
     //% blockId="HX711_READ_AVERAGE" block="read raw average %times times"
-    //% weight=80 blockGap=8
+    //% weight=80 blockGap=8 times.defl=10
     export function read_average(times: number = 10): number {
         let sum: number = 0
         let i: number = 0
@@ -183,7 +183,7 @@ namespace HX711 {
     }
 
     //% blockId="HX711_GET_UNITS" block="get scaled average %times times"
-    //% weight=80 blockGap=8
+    //% weight=80 blockGap=8 times.defl=10
     export function get_units(times: number = 10): number {
         let valor: number = 0
         //let valor_string: string = ""
@@ -209,11 +209,11 @@ namespace HX711 {
     }
 
     //% blockId="HX711_SET_SCALE" block="set scale with known weight %weight"
-    //% weight=90 blockGap=8
+    //% weight=90 blockGap=8 weight.defl=10
     export function set_scale(weight: number) {
         let avg: number = 0
         avg = read_average(10)     
-        SCALE = avg / weight
+        SCALE = (avg - OFFSET) / weight
     }
 
     //% blockId="HX711_SET_OFFSET" block="set offset %offset"
