@@ -28,7 +28,6 @@ namespace HX711 {
         PD_SCK = pinPD_SCK;
         DOUT = pinDOUT;
         set_gain(128) //default gain 128
-        tare()
     }
 
     export function is_ready(): boolean {
@@ -200,7 +199,7 @@ namespace HX711 {
         return valor
     }
 
-    //% blockId="HX711_TARE" block="tare"
+    //% blockId="HX711_TARE" block="tare (set zero)"
     //% weight=95 blockGap=8
     export function tare() {
         let avg: number = 0
