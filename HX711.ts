@@ -7,7 +7,7 @@
 //% block="HX711" weight=100 color=#ff8f3f icon="\uf24e"
 namespace HX711 {
     let PD_SCK = DigitalPin.P0;
-    let DOUT = DigitalPin.P8;
+    let DOUT = DigitalPin.P1;
     let GAIN: number = 0.0;
     let OFFSET: number = 0;	// used for tare weight
     let SCALE: number = 1;	// used to return weight in grams, kg, ounces, whatever
@@ -18,30 +18,15 @@ namespace HX711 {
       */
 
     /**
-     * Set pin at which the DOUT line is connected
-     * @param pinDOUT pin at which the HX data line is connected
+     * Set SCK and DOUT pins
+     * @param pinPD_SCK pin at which the SCK line is connected
+     * @param pinDOUT pin at which the DOUT line is connected
      */
-
-    //% blockId="SET_DOUT" block="HX711 set DataPin %pinDOUT"
+    //% blockId="HX711_BEGIN" block="begin with ClockPin %pinPD_SCK and DataPin %pinDOUT"
     //% weight=100 blockGap=8
-    export function SetPIN_DOUT(pinDOUT: DigitalPin): void {
-        DOUT = pinDOUT;
-    }
-
-    /**
-     * Set pin at which the SCK line is connected
-     * @param pinPD_SCK pin at which the HX data line is connected
-     */
-    //% blockId="SET_SCK" block="HX711 set ClockPin %pinPD_SCK"
-    //% weight=100 blockGap=8
-    export function SetPIN_SCK(pinPD_SCK: DigitalPin): void {
+    export function begin(pinPD_SCK: DigitalPin = DigitalPin.P0, pinDOUT: DigitalPin = DigitalPin.P1) {
         PD_SCK = pinPD_SCK;
-    }
-
-
-    //% blockId="HX711_BEGIN" block="begin"
-    //% weight=80 blockGap=8
-    export function begin() {
+        DOUT = pinDOUT;
         set_gain(128) //default gain 128
     }
 
@@ -86,7 +71,7 @@ namespace HX711 {
     }
 
 
-    //% blockId="HX711_READ" block="read"
+    //% blockId="HX711_READ" block="read raw data"
     //% weight=80 blockGap=8
     export function read(): number {
 
@@ -184,9 +169,9 @@ namespace HX711 {
         return false
     }
 
-    //% blockId="HX711_READ_AVERAGE" block="read N averaged raw data %times"
+    //% blockId="HX711_READ_AVERAGE" block="read raw average %times" times
     //% weight=80 blockGap=8
-    export function read_average(times: number): number {
+    export function read_average(times: number = 10): number {
         let sum: number = 0
         let i: number = 0
         for (i = 0; i < times; i++) {
@@ -196,20 +181,14 @@ namespace HX711 {
         return sum / times
     }
 
-    //% blockId="HX711_GET_VALUE" block="get N averaged offsetted data %times"
+    //% blockId="HX711_GET_UNITS" block="get scaled average %times times"
     //% weight=80 blockGap=8
-    export function get_value(times: number): number {
-        return read_average(times) - OFFSET
-    }
-
-    //% blockId="HX711_GET_UNITS" block="get N averaged final scaled value %times"
-    //% weight=80 blockGap=8
-    export function get_units(times: number): number {
+    export function get_units(times: number = 10): number {
         let valor: number = 0
         //let valor_string: string = ""
         //let ceros: string = ""
         
-        valor = get_value(times) / SCALE
+        valor = (read_average(times) - OFFSET) / SCALE
         /* if (Math.abs(Math.round((valor - Math.trunc(valor)) * 100)).toString().length == 0) {
             ceros = "00"
          } else if (Math.abs(Math.round((valor - Math.trunc(valor)) * 100)).toString().length == 1) {
@@ -220,50 +199,24 @@ namespace HX711 {
         return valor
     }
 
-    //% blockId="HX711_TARE" block="tare %times"
-    //% weight=80 blockGap=8
-    export function tare(times: number) {
-        let sum: number = 0
-        sum = read_average(times)
-        set_offset(sum)
+    //% blockId="HX711_TARE" block="tare"
+    //% weight=90 blockGap=8
+    export function tare() {
+        let avg: number = 0
+        avg = read_average(10)
+        set_offset(avg)
     }
 
-    //% blockId="HX711_SET_SCALE" block="set scale %scale"
-    //% weight=80 blockGap=8
-    export function set_scale(scale: number) {
-        SCALE = scale
-    }
-
-    //% blockId="HX711_GET_SCALE" block="get scale"
-    //% weight=80 blockGap=8
-    export function get_scale(): number {
-        return SCALE
+    //% blockId="HX711_SET_SCALE" block="set scale with known weight %weight"
+    //% weight=90 blockGap=8
+    export function set_scale(weight: number) {
+        SCALE = read_average(10) / weight
     }
 
     //% blockId="HX711_SET_OFFSET" block="set offset %offset"
-    //% weight=80 blockGap=8
+    //% weight=90 blockGap=8
     export function set_offset(offset: number) {
         OFFSET = offset
     }
-
-    //% blockId="HX711_GET_OFFSET" block="get offset"
-    //% weight=80 blockGap=8
-    export function get_offset(): number {
-        return OFFSET
-    }
-
-    //% blockId="HX711_DOWN" block="power_down"
-    //% weight=90 blockGap=8
-    export function power_down() {
-        pins.digitalWritePin(PD_SCK, 0)
-        pins.digitalWritePin(PD_SCK, 1)
-    }
-
-    //% blockId="HX711_UP" block="power_up"
-    //% weight=90 blockGap=8
-    export function power_up() {
-        pins.digitalWritePin(PD_SCK, 0)
-    }
-
 
 }/*namespace*/
