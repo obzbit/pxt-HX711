@@ -1,6 +1,6 @@
 # BBC micro:bit MakeCode editor extension for HX711 connected to weight sensors
 
-[HX711](https://www.mouser.com/datasheet/2/813/hx711_english-1022875.pdf) Based on Avia Semiconductor’s patented technology, HX711 is a precision 24-bit analog-to-digital converter (ADC) designed for weigh scales and industrial control applications to interface directly with a bridge sensor.
+[HX711](https://www.mouser.com/datasheet/2/813/hx711_english-1022875.pdf) is a precision 24-bit analog-to-digital converter (ADC) designed for weigh scales and industrial control applications to interface directly with a bridge sensor.
 
 This extension allows you to use an HX711 module with the micro:bit as a weighing machine.
 
@@ -12,43 +12,43 @@ The library myHX711 provides a set of functions to allow you to measure weight.
 
 ## begin
 
-||begin with ClockPin __ and DataPin __||
+```begin with ClockPin __ and DataPin __```
 
 This block function sets the module to begin readings. Required in the "on start" block.
 
 ## Tare
 
-||tare (set zero)||
+```tare (set zero)```
 
 This block function tares to zero with 10 readings, applying an offset to set the zero.
 
 ## Set Offset
 
-||Set Offset||
+```Set Offset```
 
 This block function sets the configured offset to apply to the readings.
 
 ## Set Scale
 
-||Set Scale with known weight||
+```Set Scale with known weight```
 
 This block function sets the configured scale. It depends on the cell used.
 
 ## Read
 
-||Read raw data||
+```Read raw data```
 
 This block function reads an integer out without any taring or offset in the reading.
 
 ## read raw average
 
-||read raw average N times||
+```read raw average N times```
 
 This block function makes "N" number of integer readings without any taring or offset neither scaling in the readings and calculates an average.
 
 ## get scaled average
 
-||get scaled average N times||
+```get scaled average N times```
 
 This block function gets the final value of the weight applying the configured scale and offset. N parameter must be higher than 1. The returned result will be N averaged.
 
@@ -77,7 +77,7 @@ Serial print line(get N averaged final scaled value(10));
 
 ```
 
-# From original version
+# From original version; read with caution
 
 ## How to calibrate your load cell
 1. Call `set_scale(Cell Full Scale)`, for example, for a 2kg cell, start with 2000.
